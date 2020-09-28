@@ -4,3 +4,4 @@ config.js
 sa/*.json
 backup/*.sqlite
 package-lock.json
+docker/docker-compose.yml

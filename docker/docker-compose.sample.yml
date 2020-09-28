@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  autogdrive:
+    build: ./
+    container_name: autogdrive
+    hostname: autogdrive
+    restart: unless-stopped
+    environment:
+      - DEFAULT_TARGET=
+      - GD_CLIENT_ID=
+      - GD_CLIENT_SECRET=
+      - GD_REFRESH_TOKEN=
+      - GD_EXPIRE=0
+      - GD_ACCESS_TOKEN=
+      - TG_TOKEN=
+      - TG_WHITELIST=
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.autogdrive-http.entrypoints=web
+      - traefik.http.routers.autogdrive-http.middlewares=https-redirect@file
+      - traefik.http.routers.autogdrive-http.rule=Host(`hostname`)
+      - traefik.http.routers.autogdrive-https.entrypoints=websecure
+      - traefik.http.routers.autogdrive-https.rule=Host(`hostname`)
+      - traefik.http.routers.autogdrive-https.service=autogdrive-srv
+      - traefik.http.routers.autogdrive-https.tls.certresolver=letsencrypthttp
+      - traefik.http.services.autogdrive-srv.loadbalancer.server.port=23333
+    volumes:
+      - /data/etc/autogdrive/sa:/app/sa
+
